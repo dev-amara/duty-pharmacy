@@ -4,7 +4,9 @@ import * as puppeteer from 'puppeteer';
 @Injectable()
 export class AppService {
   async getHello() {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      ignoreDefaultArgs: ['--disable-extensions'],
+    });
     const page = await browser.newPage();
     await page.goto('https://pharma-consults.net/pharmacies-gardes');
 
