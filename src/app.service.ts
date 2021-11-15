@@ -19,6 +19,8 @@ export class AppService {
         dateEnd: 6,
       };
 
+      const regex = new RegExp('@(.*),(.*),');
+
       const tableResponsive = document.querySelector('div.table-responsive');
       const allH5 = [...tableResponsive.querySelectorAll('h5')];
       const tables = [...tableResponsive.querySelectorAll(`table`)];
@@ -38,6 +40,15 @@ export class AppService {
         result.pharmacies = allTrOfH5.map((subTr) => {
           const allTd = [...subTr.querySelectorAll('td')];
 
+          const lon_lat_match = Object.assign(
+            {},
+            allTd[fieldsMaping.map].firstChild.toString().match(regex),
+          );
+          const fieldsMapingMap = { lon: 1, lat: 2 };
+
+          const long = lon_lat_match[fieldsMapingMap.lon] || null;
+          const lat = lon_lat_match[fieldsMapingMap.lat] || null;
+
           return {
             label: allTd[fieldsMaping.label].innerText.toUpperCase().trim(),
             director: allTd[fieldsMaping.director].innerText
@@ -45,7 +56,8 @@ export class AppService {
               .trim(),
             tel: allTd[fieldsMaping.tel].innerText.trim(),
             location: allTd[fieldsMaping.location].innerText.trim(),
-            map: allTd[fieldsMaping.map].innerText.trim(),
+            long,
+            lat,
             dateStart: allTd[fieldsMaping.dateStart].innerText.trim(),
             dateEnd: allTd[fieldsMaping.dateEnd].innerText.trim(),
           };
