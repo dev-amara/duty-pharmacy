@@ -37,7 +37,7 @@ export class AppService {
 
         const allTrOfH5 = [...tables[index].querySelectorAll('.odd')];
 
-        result.pharmacies = allTrOfH5.map((subTr) => {
+        result.pharmacies = allTrOfH5.map((subTr, index) => {
           const allTd = [...subTr.querySelectorAll('td')];
 
           const lon_lat_match = Object.assign(
@@ -50,6 +50,7 @@ export class AppService {
           const lat = lon_lat_match[fieldsMapingMap.lat] || null;
 
           return {
+            id: index + 1,
             label: allTd[fieldsMaping.label].innerText.toUpperCase().trim(),
             director: allTd[fieldsMaping.director].innerText
               .toUpperCase()
@@ -60,6 +61,7 @@ export class AppService {
             lat,
             dateStart: allTd[fieldsMaping.dateStart].innerText.trim(),
             dateEnd: allTd[fieldsMaping.dateEnd].innerText.trim(),
+            communeId: result.id,
           };
         });
 
