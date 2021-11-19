@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
+import { LocalitiesService } from './app/localities/localities.service';
 
 @Injectable()
 export class AppService {
-  async getHello() {
+  constructor(private localityService: LocalitiesService) {}
+
+  async scrap() {
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto('https://pharma-consults.net/pharmacies-gardes');
@@ -72,7 +75,8 @@ export class AppService {
     // console.log(util.inspect(arrayCities, false, null, true /* enable colors */));
 
     await browser.close();
-
+    await this.localityService.deleteMany();
+    await this.localityService.insertMany(listOfDutyPharmacies);
     return listOfDutyPharmacies;
   }
 }
