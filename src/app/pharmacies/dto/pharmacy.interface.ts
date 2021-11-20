@@ -10,4 +10,5 @@ export interface Pharmacy extends Document {
   readonly location: string;
   readonly dateStart: string;
   readonly dateEnd: string;
+  readonly locality_id: any;
 }

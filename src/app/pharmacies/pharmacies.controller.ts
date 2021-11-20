@@ -32,6 +32,11 @@ export class PharmaciesController {
     return this.pharmaciesService.findOne(id);
   }
 
+  @Get('locality/:localityId')
+  findByLocalityId(@Param('localityId') localityId: string) {
+    return this.pharmaciesService.findByLocalityId(localityId);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

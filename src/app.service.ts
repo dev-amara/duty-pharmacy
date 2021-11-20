@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 import { LocalitiesService } from './app/localities/localities.service';
+import { PharmaciesService } from './app/pharmacies/pharmacies.service';
 
 @Injectable()
 export class AppService {
-  constructor(private localityService: LocalitiesService) {}
+  constructor(
+    private localityService: LocalitiesService,
+    private pharmacyService: PharmaciesService,
+  ) {}
 
   async scrap() {
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
@@ -76,7 +80,21 @@ export class AppService {
 
     await browser.close();
     await this.localityService.deleteMany();
-    await this.localityService.insertMany(listOfDutyPharmacies);
-    return listOfDutyPharmacies;
+    await this.pharmacyService.deleteMany();
+
+    listOfDutyPharmacies.map(async (obj) => {
+      const locality = await this.localityService.create({
+        commune: obj.commune,
+      });
+
+      obj.pharmacies.map(async (pharmacy) => {
+        await this.pharmacyService.create({
+          ...pharmacy,
+          locality_id: locality._id,
+        });
+      });
+    });
+
+    return 'OK';
   }
 }

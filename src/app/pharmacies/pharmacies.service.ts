@@ -28,6 +28,14 @@ export class PharmaciesService {
     return this.pharmacyModel.findById(id).exec();
   }
 
+  async findByLocalityId(localityId: string) {
+    return this.pharmacyModel
+      .find({
+        locality_id: localityId,
+      })
+      .exec();
+  }
+
   async update(id: string, UpdatePharmacyDto: UpdatePharmacyDto) {
     return this.pharmacyModel.findByIdAndUpdate(id, UpdatePharmacyDto).exec();
   }
